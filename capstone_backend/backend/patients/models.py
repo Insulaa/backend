@@ -1,9 +1,10 @@
 # from django.db import models
 from djongo import models 
 # from djongo.models import forms 
+# from rest_framework_mongoengine.fields import ObjectIdField
 
 class Users(models.Model):
-    user_id = models.AutoField(primary_key=True, unique=True)
+    _id = models.ObjectIdField()
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
@@ -11,7 +12,6 @@ class Users(models.Model):
 
 #need to figure out how to do this 
 class User_Setup(models.Model):
-    user_id = models.ForeignKey(Users, on_delete=models.CASCADE, null=True)
     question1 = models.CharField(max_length=100)
     question2 = models.CharField(max_length=100)
     question3 = models.CharField(max_length=100)
@@ -28,7 +28,7 @@ class Medication(models.Model):
     end = models.DateTimeField(blank=True, null=True)
 
 class User_health_metric(models.Model): 
-    ""
+    u_id = models.IntegerField(blank=True, null=True)
 
 class Glucose_level(models.Model):
     glucose_reading = models.IntegerField(blank=True, null=True)

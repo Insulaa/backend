@@ -12,6 +12,7 @@ django-rest-knox = "*"
 djongo = "*"
 mongoengine = "*"
 django-rest-framework-mongoengine = "*"
+django-filter = "*"
 
 [requires]
 python_version = "3.8"
