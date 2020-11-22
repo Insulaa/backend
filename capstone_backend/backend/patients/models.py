@@ -5,14 +5,14 @@ from djongo import models
 import uuid
 
 class Users(models.Model):
-    user_id = models.UUIDField(default = uuid.uuid4, editable=False, unique=True)
+    user_id = models.UUIDField(default = uuid.uuid4, editable=False, primary_key=True, unique=True)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
     email = models.CharField(max_length=100, unique=True)
 
 #need to figure out how to do this 
-class User_Setup(models.Model):
+class User_Setup(models.Model): 
     question1 = models.CharField(max_length=100)
     question2 = models.CharField(max_length=100)
     question3 = models.CharField(max_length=100)
