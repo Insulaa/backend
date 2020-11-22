@@ -12,12 +12,14 @@ class Users(models.Model):
     email = models.CharField(max_length=100, unique=True)
 
 #need to figure out how to do this 
-class User_Setup(models.Model): 
+class User_Setup(models.Model):
+    
     question1 = models.CharField(max_length=100)
     question2 = models.CharField(max_length=100)
     question3 = models.CharField(max_length=100)
 
 class Medication(models.Model):
+    user_id = models.ForeignKey(Users, on_delete=models.CASCADE) 
     medication_id = models.AutoField(primary_key=True, unique=True)
     name = models.CharField(max_length=100)
     prescribed_by = models.CharField(max_length=100)
