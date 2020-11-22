@@ -2,9 +2,10 @@
 from djongo import models 
 # from djongo.models import forms 
 # from rest_framework_mongoengine.fields import ObjectIdField
+import uuid
 
 class Users(models.Model):
-    _id = models.ObjectIdField()
+    user_id = models.UUIDField(default = uuid.uuid4, editable=False, unique=True)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     password = models.CharField(max_length=100)

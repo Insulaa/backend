@@ -13,6 +13,8 @@ djongo = "*"
 mongoengine = "*"
 django-rest-framework-mongoengine = "*"
 django-filter = "*"
+uuid = "*"
+dnspython = "*"
 
 [requires]
 python_version = "3.8"

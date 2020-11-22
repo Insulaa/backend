@@ -70,11 +70,14 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        'NAME': 'dev',
-        'HOST': 'mongodb+srv://nimesh19:insula123@insula.5vhpo.mongodb.net/dev?retryWrites=true&w=majority',
-        'username': 'nimesh19',
-        'password': 'insula123'
-    }
+        "CLIENT": {
+           "name": 'dev',
+           "host": 'mongodb+srv://nimesh19:insula123@insula.5vhpo.mongodb.net/dev?retryWrites=true&w=majority',
+           "username": 'nimesh19',
+           "password": 'insula123',
+           "authMechanism": "SCRAM-SHA-1",
+        }, 
+    }        
 }
 
 # Password validation

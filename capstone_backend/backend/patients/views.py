@@ -12,7 +12,7 @@ class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
     serializer_class = UserSerializer
     # filter_backends = (DjangoFilterBackend)
-    filterset_fields = ['first_name']
+    filterset_fields = ['user_id', 'first_name']
 
 class SetupViewSet(viewsets.ModelViewSet):
 
