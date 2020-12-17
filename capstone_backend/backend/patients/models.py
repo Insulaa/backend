@@ -4,6 +4,10 @@ from djongo import models
 # from rest_framework_mongoengine.fields import ObjectIdField
 import uuid
 
+class Medication_master(models.Model):
+    medication_id = models.IntegerField()
+    medication_name = models.CharField(max_length=500)
+
 class Users(models.Model):
     user_id = models.UUIDField(default = uuid.uuid4, editable=False, primary_key=True, unique=True)
     first_name = models.CharField(max_length=100)
@@ -20,15 +24,18 @@ class User_Setup(models.Model):
 
 class Medication(models.Model):
     user_id = models.ForeignKey(Users, on_delete=models.CASCADE) 
-    medication_id = models.AutoField(primary_key=True, unique=True)
-    name = models.CharField(max_length=100)
+    medication_id = models.ForeignKey(Medication_master, on_delete=models.CASCADE) 
+    name = models.ForeignKey(Medication_master, on_delete=models.CASCADE)
     prescribed_by = models.CharField(max_length=100)
-    dosage = models.IntegerField(blank=True, null=True)  #are we taking this in as an int
+    dosage_amount = models.IntegerField(blank=True, null=True)  #are we taking this in as an int
     dosage_unit = models.CharField(max_length=50)
+    dosage_form = models.CharField(max_length=100)
+    #strength 
     frequency = models.CharField(max_length=100)
     currently_taking = models.BooleanField(default=0)
     start = models.DateTimeField(blank=True, null=True)
     end = models.DateTimeField(blank=True, null=True)
+
 
 class User_health_metric(models.Model): 
     u_id = models.IntegerField(blank=True, null=True)
