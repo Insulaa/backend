@@ -24,7 +24,7 @@ class User_Setup(models.Model):
 
 class Medication(models.Model):
     user_id = models.ForeignKey(Users, on_delete=models.CASCADE) 
-    medication_id = models.ForeignKey(Medication_master, on_delete=models.CASCADE) 
+    # medication_id = models.ForeignKey(Medication_master, on_delete=models.CASCADE) 
     name = models.ForeignKey(Medication_master, on_delete=models.CASCADE)
     prescribed_by = models.CharField(max_length=100)
     dosage_amount = models.IntegerField(blank=True, null=True)  #are we taking this in as an int
