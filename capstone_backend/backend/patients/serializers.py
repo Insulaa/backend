@@ -1,7 +1,12 @@
 from rest_framework import serializers
-from patients.models import Users, User_Setup, Medication, User_health_metric, Glucose_level, Blood_pressure, Weight
+from patients.models import Medication_master, Users, User_Setup, Medication, User_health_metric, Glucose_level, Blood_pressure, Weight
 from rest_framework_mongoengine.serializers import DocumentSerializer
-# User Serializer 
+
+class MedicationMasterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Medication_master
+        fields = '__all__'
+        # read_only_fields = ('medication_id', 'medication_name')
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

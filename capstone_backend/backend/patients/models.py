@@ -5,8 +5,8 @@ from djongo import models
 import uuid
 
 class Medication_master(models.Model):
-    medication_id = models.IntegerField()
     medication_name = models.CharField(max_length=500)
+    medication_id = models.IntegerField()
 
 class Users(models.Model):
     user_id = models.UUIDField(default = uuid.uuid4, editable=False, primary_key=True, unique=True)
@@ -18,6 +18,7 @@ class Users(models.Model):
 #need to figure out how to do this 
 class User_Setup(models.Model):
     
+    user_id = models.ForeignKey(Users, on_delete=models.CASCADE) 
     question1 = models.CharField(max_length=100)
     question2 = models.CharField(max_length=100)
     question3 = models.CharField(max_length=100)
@@ -25,7 +26,7 @@ class User_Setup(models.Model):
 class Medication(models.Model):
     user_id = models.ForeignKey(Users, on_delete=models.CASCADE) 
     # medication_id = models.ForeignKey(Medication_master, on_delete=models.CASCADE) 
-    name = models.ForeignKey(Medication_master, on_delete=models.CASCADE)
+    medication_name = models.ForeignKey(Medication_master, on_delete=models.CASCADE)
     prescribed_by = models.CharField(max_length=100)
     dosage_amount = models.IntegerField(blank=True, null=True)  #are we taking this in as an int
     dosage_unit = models.CharField(max_length=50)
@@ -41,15 +42,17 @@ class User_health_metric(models.Model):
     u_id = models.IntegerField(blank=True, null=True)
 
 class Glucose_level(models.Model):
+    user_id = models.ForeignKey(Users, on_delete=models.CASCADE) 
     glucose_reading = models.IntegerField(blank=True, null=True)
     timestamp = models.DateTimeField(auto_now=True)
 
 class Blood_pressure(models.Model):
+    user_id = models.ForeignKey(Users, on_delete=models.CASCADE) 
     bp_reading = models.IntegerField(blank=True, null=True)
     timestamp = models.DateTimeField(auto_now=True)
 
 class Weight(models.Model):
+    user_id = models.ForeignKey(Users, on_delete=models.CASCADE) 
     weight_reading = models.IntegerField(blank=True, null=True)
     weight_unit = models.CharField(max_length=100)
     timestamp = models.DateTimeField(auto_now=True)
-

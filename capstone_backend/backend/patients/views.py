@@ -1,10 +1,16 @@
 from django.shortcuts import render
-from patients.models import Users, User_Setup, Medication
-from rest_framework import viewsets, permissions, generics
-from .serializers import UserSerializer, SetupSerializer, MedicationSerializer
+from patients.models import Users, User_Setup, Medication, Glucose_level, Medication_master
+from rest_framework import viewsets, permissions, generics, status 
+from .serializers import UserSerializer, SetupSerializer, MedicationSerializer, GlucoseSerializer, MedicationMasterSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 
-#User ViewSet
+from rest_framework.decorators import api_view
+
+class MedicationMasterViewSet(viewsets.ModelViewSet):
+
+    queryset = Medication_master.objects.all()
+    permission_classes = [permissions.AllowAny]
+    serializer_class = MedicationMasterSerializer
 
 class UserViewSet(viewsets.ModelViewSet):
 
@@ -25,3 +31,22 @@ class MedicationViewSet(viewsets.ModelViewSet):
     queryset = Medication.objects.all()
     permission_classes = [permissions.AllowAny]
     serializer_class = MedicationSerializer
+
+class GlucoseLevelViewSet(viewsets.ModelViewSet):
+
+    queryset = Glucose_level.objects.all()
+    permission_classes = [permissions.AllowAny]
+    serializer_class = GlucoseSerializer
+
+@api_view(['GET'])
+def Fourteen_day_avg(request):
+    if request.method == 'GET':
+        tutorials = Tutorial.objects.all()
+        
+        title = request.GET.get('title', None)
+        if title is not None:
+            tutorials = tutorials.filter(title__icontains=title)
+        
+        tutorials_serializer = TutorialSerializer(tutorials, many=True)
+        return JsonResponse(tutorials_serializer.data, safe=False)
+        # 'safe=False' for objects serialization
