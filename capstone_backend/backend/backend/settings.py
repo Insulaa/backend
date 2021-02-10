@@ -70,14 +70,12 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'djongo',
-        "CLIENT": {
-           "name": 'dev',
-           "host": 'mongodb+srv://nimesh19:insula123@insula.5vhpo.mongodb.net/dev?retryWrites=true&w=majority',
-           "username": 'nimesh19',
-           "password": 'insula123',
-           "authMechanism": "SCRAM-SHA-1",
-        }, 
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'egvobwam',
+        'USER': 'egvobwam',
+        'PASSWORD': 'uZaCJIycFvTZGuOlW6pK0KRMn87qpAws',
+        'HOST': 'ziggy.db.elephantsql.com',
+        'PORT': '5432'
     }        
 }
 
