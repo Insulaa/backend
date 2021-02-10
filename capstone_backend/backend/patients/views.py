@@ -37,6 +37,7 @@ class GlucoseLevelViewSet(viewsets.ModelViewSet):
     queryset = Glucose_level.objects.all()
     permission_classes = [permissions.AllowAny]
     serializer_class = GlucoseSerializer
+    filterset_fields = ['user_id', 'date']
 
 @api_view(['GET'])
 def Fourteen_day_avg(request):
