@@ -1,12 +1,11 @@
 from rest_framework import serializers
-from patients.models import Medication_master, Users, User_Setup, Medication, User_health_metric, Glucose_level, Blood_pressure, Weight
-from rest_framework_mongoengine.serializers import DocumentSerializer
+from patients.models import Medication_master, Users, User_Setup, Medication, Glucose_level, Blood_pressure, Weight
 
 class MedicationMasterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Medication_master
         fields = '__all__'
-        # read_only_fields = ('medication_id', 'medication_name')
+        read_only_fields = ('medication_id', 'medication_name', 'medication_unit')
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -38,17 +37,17 @@ class WeightSerializer(serializers.ModelSerializer):
         model = Weight
         fields = '__all__'
 
-class HealthMetricSerializer(serializers.ModelSerializer):
-    Glucose = GlucoseSerializer(many=True)
-    BloodPressure = BloodSerializer(many=True)
-    Weight = WeightSerializer(many=True)
+# class HealthMetricSerializer(serializers.ModelSerializer):
+#     Glucose = GlucoseSerializer(many=True)
+#     BloodPressure = BloodSerializer(many=True)
+#     Weight = WeightSerializer(many=True)
 
-    class Meta:
-        model = User_health_metric
-        fields = ['Glucose',
-                 'BloodPressue',
-                 'Weight'
-        ]
+#     class Meta:
+#         model = User_health_metric
+#         fields = ['Glucose',
+#                  'BloodPressue',
+#                  'Weight'
+#         ]
 
     #FIX UP 
 
