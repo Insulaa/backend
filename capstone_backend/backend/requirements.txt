@@ -1,8 +1,9 @@
 asgiref==3.3.1
-cffi==1.14.4
-cryptography==3.4.3
+cffi==1.14.5
+cryptography==3.4.5
 Django==3.0.5
 django-filter==2.4.0
+django-phone-field==1.8.1
 django-rest-framework-mongoengine==3.4.1
 django-rest-knox==4.1.0
 djangorestframework==3.12.2
