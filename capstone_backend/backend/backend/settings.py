@@ -31,7 +31,7 @@ INSTALLED_APPS = [
     'patients',
     'rest_framework',
     'django_filters',
-    # 'django-rest-framework-mongoengine'
+    'phone_field'
 ]
 
 MIDDLEWARE = [

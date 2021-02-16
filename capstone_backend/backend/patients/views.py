@@ -3,7 +3,7 @@ from patients.models import Users, User_Setup, Medication, Glucose_level, Medica
 from rest_framework import viewsets, permissions, generics, status 
 from .serializers import UserSerializer, SetupSerializer, MedicationSerializer, GlucoseSerializer, MedicationMasterSerializer
 from django_filters.rest_framework import DjangoFilterBackend
-
+import datetime 
 from rest_framework.decorators import api_view
 
 class MedicationMasterViewSet(viewsets.ModelViewSet):
@@ -33,20 +33,19 @@ class MedicationViewSet(viewsets.ModelViewSet):
     serializer_class = MedicationSerializer
 
 class GlucoseLevelViewSet(viewsets.ModelViewSet):
-
+    
     queryset = Glucose_level.objects.all()
     permission_classes = [permissions.AllowAny]
     serializer_class = GlucoseSerializer
     filterset_fields = ['user_id', 'date']
 
 @api_view(['GET'])
-def Fourteen_day_avg(request):
+def FourteenDayAvg(request):
     if request.method == 'GET':
-        tutorials = Tutorial.objects.all()
-        
-        title = request.GET.get('title', None)
-        if title is not None:
-            tutorials = tutorials.filter(title__icontains=title)
+        startdate = date.today()
+        enddate = date.today() + datetime.timedelta(days=-14)
+        result=Glucose_level.objects.raw('select ')
+    
         
         tutorials_serializer = TutorialSerializer(tutorials, many=True)
         return JsonResponse(tutorials_serializer.data, safe=False)

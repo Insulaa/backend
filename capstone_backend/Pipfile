@@ -16,6 +16,7 @@ django-filter = "*"
 uuid = "*"
 dnspython = "*"
 psycopg2-binary = "*"
+django-phone-field = "*"
 
 [requires]
 python_version = "3.8"

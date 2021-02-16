@@ -1,4 +1,5 @@
 from django.db import models 
+from phone_field import PhoneField
 
 class Medication_master(models.Model):
     medication_id = models.IntegerField(primary_key=True, unique=True)
@@ -14,6 +15,7 @@ class Users(models.Model):
     last_name = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
     email = models.CharField(max_length=100, unique=True)
+    phone_number = PhoneField(blank=True)
 
     class Meta:
         db_table = 'Users'
