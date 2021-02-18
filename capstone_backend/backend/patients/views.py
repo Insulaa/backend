@@ -33,7 +33,7 @@ class MedicationViewSet(viewsets.ModelViewSet):
     serializer_class = MedicationSerializer
 
 class GlucoseLevelViewSet(viewsets.ModelViewSet):
-    
+
     queryset = Glucose_level.objects.all()
     permission_classes = [permissions.AllowAny]
     serializer_class = GlucoseSerializer
@@ -42,8 +42,9 @@ class GlucoseLevelViewSet(viewsets.ModelViewSet):
 @api_view(['GET'])
 def FourteenDayAvg(request):
     if request.method == 'GET':
-        startdate = date.today()
-        enddate = date.today() + datetime.timedelta(days=-14)
+        startdate = date.today() - datetime.timedelta(days=14)
+        enddate = date.today()
+        user_id = request.query_params('user_id')
         result=Glucose_level.objects.raw('select ')
     
         

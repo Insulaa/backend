@@ -22,7 +22,7 @@ class Users(models.Model):
 
 #need to figure out how to do this 
 class User_Setup(models.Model):
-    user = models.ForeignKey(Users, related_name='user_setup', on_delete=models.CASCADE) 
+    user_id = models.ForeignKey(Users, related_name='user_setup', on_delete=models.CASCADE) 
     question1 = models.CharField(max_length=100)
     question2 = models.CharField(max_length=100)
     question3 = models.CharField(max_length=100)
@@ -32,7 +32,7 @@ class User_Setup(models.Model):
 
 class Medication(models.Model):
     medication_input_id = models.AutoField(primary_key=True, unique=True)
-    user = models.ForeignKey(Users, related_name='user_medication', on_delete=models.CASCADE) 
+    user_id = models.ForeignKey(Users, related_name='user_medication', on_delete=models.CASCADE) 
     medication_id = models.ForeignKey(Medication_master, related_name='medication', on_delete=models.CASCADE) 
     # medication_image = models.ImageField(upload_to='images/')
     frequency = models.CharField(max_length=100)
@@ -44,13 +44,13 @@ class Medication(models.Model):
         db_table = 'Medication'
 
 class Glucose_level(models.Model):
-    user = models.ForeignKey(Users, related_name='user_glucose', on_delete=models.CASCADE) 
+    user_id = models.ForeignKey(Users, related_name='user_glucose', on_delete=models.CASCADE) 
     glucose_reading = models.IntegerField(blank=True, null=True)
     date = models.DateField(auto_now=True)
     timestamp = models.TimeField(auto_now=True)
 
 class Blood_pressure(models.Model):
-    user = models.ForeignKey(Users, on_delete=models.CASCADE) 
+    user_id = models.ForeignKey(Users, on_delete=models.CASCADE) 
     bp_reading = models.IntegerField(blank=True, null=True)
     date = models.DateField(auto_now=True)
     timestamp = models.TimeField(auto_now=True)

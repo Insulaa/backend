@@ -1,6 +1,7 @@
 
 from pathlib import Path
 import django
+import os 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -70,12 +71,13 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'egvobwam',
-        'USER': 'egvobwam',
-        'PASSWORD': 'uZaCJIycFvTZGuOlW6pK0KRMn87qpAws',
-        'HOST': 'ziggy.db.elephantsql.com',
-        'PORT': '5432'
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'capstone-tables',
+        'USER': 'admin',
+        'PASSWORD': 'Capstonecefn2021!',
+        'HOST': 'capstone-database-rds.c5cmez2q4fad.ca-central-1.rds.amazonaws.com',
+        'PORT': '3306',
+        'OPTIONS': {'init_command': "SET sql_mode='STRICT_ALL_TABLES'"}
     }        
 }
 
@@ -103,7 +105,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'US/eastern'
 
 USE_I18N = True
 

@@ -17,6 +17,7 @@ uuid = "*"
 dnspython = "*"
 psycopg2-binary = "*"
 django-phone-field = "*"
+mysqlclient = "*"
 
 [requires]
 python_version = "3.8"
