@@ -4,7 +4,10 @@ from rest_framework import viewsets, permissions, generics, status
 from .serializers import UserSerializer, SetupSerializer, MedicationSerializer, GlucoseSerializer, MedicationMasterSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 import datetime 
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework.renderers import JSONRenderer
 
 class MedicationMasterViewSet(viewsets.ModelViewSet):
 
@@ -40,14 +43,13 @@ class GlucoseLevelViewSet(viewsets.ModelViewSet):
     filterset_fields = ['user_id', 'date']
 
 @api_view(['GET'])
+# @renderer_classes([JSONRenderer])
+@permission_classes([AllowAny])
 def FourteenDayAvg(request):
     if request.method == 'GET':
-        startdate = date.today() - datetime.timedelta(days=14)
-        enddate = date.today()
-        user_id = request.query_params('user_id')
-        result=Glucose_level.objects.raw('select ')
-    
+        startdate = (datetime.date.today() - datetime.timedelta(days=14)).strftime("%Y/%M/%D")
+        enddate = datetime.date.today().strftime("%Y/%M/%D")
+        user_id = request.query_params.get('user_id')
+        result = Glucose_level.objects.raw('SELECT AVG(glucose_reading) FROM `capstone-tables`.patients_glucose_level where date BETWEEN ' + startdate + ' AND ' + enddate + ' AND user_id = ' + user_id)   
         
-        tutorials_serializer = TutorialSerializer(tutorials, many=True)
-        return JsonResponse(tutorials_serializer.data, safe=False)
-        # 'safe=False' for objects serialization
+        return render(request, result)
