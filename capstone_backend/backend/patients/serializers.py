@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from patients.models import Medication_master, Users, User_Setup, Medication, Glucose_level, Blood_pressure, Weight
+from patients.models import Medication_master, Patients, Patient_Setup, Medication, Glucose_level, Blood_pressure, Weight
 
 class MedicationMasterSerializer(serializers.ModelSerializer):
     class Meta:
@@ -7,14 +7,14 @@ class MedicationMasterSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ('medication_id', 'medication_name', 'medication_unit')
 
-class UserSerializer(serializers.ModelSerializer):
+class PatientSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Users
+        model = Patients
         fields = '__all__'
 
 class SetupSerializer(serializers.ModelSerializer):
     class Meta: 
-        model = User_Setup
+        model = Patient_Setup
         fields = '__all__'
 
 class MedicationSerializer(serializers.ModelSerializer):
@@ -25,7 +25,7 @@ class MedicationSerializer(serializers.ModelSerializer):
 class GlucoseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Glucose_level
-        fields = '__all__'
+        fields = ('date', 'glucose_reading', 'id', 'patient_id', 'timestamp')
 
 class BloodSerializer(serializers.ModelSerializer):
     class Meta:
