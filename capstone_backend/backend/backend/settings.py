@@ -72,7 +72,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'capstone-tables',
+        'NAME': 'capstone_tables',
         'USER': 'admin',
         'PASSWORD': 'Capstonecefn2021!',
         'HOST': 'capstone-database-rds.c5cmez2q4fad.ca-central-1.rds.amazonaws.com',
