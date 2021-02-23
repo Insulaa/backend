@@ -58,6 +58,18 @@ class GlucoseLevelViewSet(viewsets.ModelViewSet):
 #             "end_date",
 #         ]
 
+class GlucoseToday(viewsets.ModelViewSet):
+
+    serializer_class = GlucoseSerializer
+
+    def get_queryset(self):
+
+        patient_id = self.request.query_params.get('patient_id')
+        today = datetime.date.today().strftime('%Y-%m-%d')
+        patient_list = Glucose_level.objects.filter(date =today, patient_id=patient_id)
+        # final = patient_list.all().aggregate(Avg('glucose_reading'))
+        return patient_list
+
 class FourteenDayAvg(viewsets.ModelViewSet):
 
     serializer_class = GlucoseSerializer

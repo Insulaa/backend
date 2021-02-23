@@ -9,5 +9,6 @@ router.register('views/medications', MedicationViewSet, 'medications')
 router.register('views/glucoseLevels', GlucoseLevelViewSet, 'glucoseLevels')
 router.register('views/MedicationMaster', MedicationMasterViewSet, 'MedicationMaster')
 router.register('FourteenDayAvg', views.FourteenDayAvg, '14Dayavg')
+router.register('GlucoseToday', views.GlucoseToday, 'GlucoseToday       ')
 
 urlpatterns = router.urls
