@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from patients.models import Patients, Patient_Setup, Medication, Glucose_level, Medication_master
 from rest_framework import viewsets, permissions, generics, status 
-from .serializers import PatientSerializer, SetupSerializer, MedicationSerializer, GlucoseSerializer, MedicationMasterSerializer
+from .serializers import PatientSerializer, SetupSerializer, MedicationSerializer, GlucoseSerializer, GlucoseFourteenSerializer, MedicationMasterSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 import datetime 
 from rest_framework.decorators import api_view, permission_classes
@@ -72,7 +72,7 @@ class GlucoseToday(viewsets.ModelViewSet):
 
 class FourteenDayAvg(viewsets.ModelViewSet):
 
-    serializer_class = GlucoseSerializer
+    serializer_class = GlucoseFourteenSerializer
 
     # @action(method=['get'], permission_classes=[AllowAny])
     def get_queryset(self):
@@ -80,7 +80,19 @@ class FourteenDayAvg(viewsets.ModelViewSet):
         patient_id = self.request.query_params.get('patient_id')
         sdate = (datetime.date.today() - datetime.timedelta(days=14)).strftime('%Y-%m-%d')
         edate = (datetime.date.today() + datetime.timedelta(days=1)).strftime('%Y-%m-%d')
-        patient_list = Glucose_level.objects.filter(date__range =(sdate,edate), patient_id=patient_id)
-        # final = patient_list.all().aggregate(Avg('glucose_reading'))
-        return patient_list
+        patient_list = Glucose_level.objects.filter(date__range =(sdate,edate), patient_id=patient_id).values('glucose_reading')
+        # final = patient_list.all().aggregate(avg_g = Avg('glucose_reading'))
+        # p = patient_list.items()
+        # lst = list(patient_list)[0]
+
+        # for each in lst:
+        #     a = list()
+        #     a.append(each.glucose_reading)
+
+        # avg = sum(a)/len(a)
+        return patient_list 
+
+    
+
+    
 
