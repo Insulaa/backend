@@ -23,6 +23,13 @@ class MedicationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class GlucoseSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Glucose_level
+        fields = '__all__'
+
+class GlucoseFourteenSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = Glucose_level
         fields = ('date', 'glucose_reading', 'id', 'patient_id', 'timestamp')
