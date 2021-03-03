@@ -27,12 +27,15 @@ class GlucoseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Glucose_level
         fields = '__all__'
+        read_only_fields = ('date', 'timestamp')
 
 class GlucoseFourteenSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Glucose_level
         fields = ('date', 'glucose_reading', 'id', 'patient_id', 'timestamp')
+
+    
 
 class BloodSerializer(serializers.ModelSerializer):
     class Meta:

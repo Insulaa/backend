@@ -10,6 +10,7 @@ from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer
 from django.db.models import Avg, Count, Sum
 
+
 class MedicationMasterViewSet(viewsets.ModelViewSet):
 
     queryset = Medication_master.objects.all()
@@ -43,20 +44,19 @@ class GlucoseLevelViewSet(viewsets.ModelViewSet):
     serializer_class = GlucoseSerializer
     filterset_fields = ['patient_id', 'date']
 
-# class GlucoseFilter(filters.FilterSet):
-#     start_date = filters.DateFilter(lookup_expr="gte")
-#     end_date = filters.DateFilter(lookup_expr="lte")
+    def partial_update(self, request, pk=None):
 
-#     class Meta:
-#         model = Glucose_level
-#         fields = [
-#             "patient",
-#             "glucose_reading",
-#             "date",
-#             "timestamp",
-#             "start_date",
-#             "end_date",
-#         ]
+        instance = self.get_object()
+        data = request.data 
+
+        instance.patient_id = data['patient']
+        instance.glucose_reading = data['glucose_reading']
+
+        instance.save()
+
+        serializer = GlucoseSerializer(instance, partial=True)
+
+        return Response(serializer.data)
 
 class GlucoseToday(viewsets.ModelViewSet):
 
@@ -80,7 +80,9 @@ class FourteenDayAvg(viewsets.ModelViewSet):
         patient_id = self.request.query_params.get('patient_id')
         sdate = (datetime.date.today() - datetime.timedelta(days=14)).strftime('%Y-%m-%d')
         edate = (datetime.date.today() + datetime.timedelta(days=1)).strftime('%Y-%m-%d')
-        patient_list = Glucose_level.objects.filter(date__range =(sdate,edate), patient_id=patient_id).values('glucose_reading')
+        patient_list = Glucose_level.objects.filter(date__range =(sdate,edate), patient_id=patient_id)
+        # .values('glucose_reading')
+        
         # final = patient_list.all().aggregate(avg_g = Avg('glucose_reading'))
         # p = patient_list.items()
         # lst = list(patient_list)[0]
@@ -92,7 +94,7 @@ class FourteenDayAvg(viewsets.ModelViewSet):
         # avg = sum(a)/len(a)
         return patient_list 
 
-    
+
 
     
 
