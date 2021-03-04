@@ -37,12 +37,6 @@ class MedicationViewSet(viewsets.ModelViewSet):
 
     queryset = Medication.objects.all()
     permission_classes = [permissions.AllowAny]
-    serializer_class = MedicationSerializer
-    parser_classes = [MultiPartParser]
-
-class CreateMed(viewsets.ModelViewSet):
-    queryset = Medication.objects.all()
-    permission_classes = [permissions.AllowAny]
     parser_classes = [MultiPartParser, FormParser]
     serializer_class = MedicationSerializer
 
