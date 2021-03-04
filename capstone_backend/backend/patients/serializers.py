@@ -35,7 +35,6 @@ class GlucoseFourteenSerializer(serializers.ModelSerializer):
         model = Glucose_level
         fields = ('date', 'glucose_reading', 'id', 'patient_id', 'timestamp')
 
-    
 
 class BloodSerializer(serializers.ModelSerializer):
     class Meta:
@@ -46,24 +45,3 @@ class WeightSerializer(serializers.ModelSerializer):
     class Meta:
         model = Weight
         fields = '__all__'
-
-# class HealthMetricSerializer(serializers.ModelSerializer):
-#     Glucose = GlucoseSerializer(many=True)
-#     BloodPressure = BloodSerializer(many=True)
-#     Weight = WeightSerializer(many=True)
-
-#     class Meta:
-#         model = User_health_metric
-#         fields = ['Glucose',
-#                  'BloodPressue',
-#                  'Weight'
-#         ]
-
-    #FIX UP 
-
-    # def create(self, validated_data):
-    #     pods = validated_data.pop('pods')
-    #     quote = SbQuote.objects.create(**validated_data)
-    #     for pod in pods:
-    #         SbQuoteLoccvg.objects.create(**pod, quote = quote)
-    #     return quote
