@@ -27,19 +27,24 @@ class Patient_Setup(models.Model):
     question1 = models.CharField(max_length=100)
     question2 = models.CharField(max_length=100)
     question3 = models.CharField(max_length=100)
+    upper_bound = models.FloatField(null=True)
+    lower_bound = models.FloatField(null=True)
 
     class Meta:
         db_table = 'Patient_Setup'
+
+def upload_to(instance, filename):
+    return 'posts/{filename}'.format(filename=filename)
 
 class Medication(models.Model):
     medication_input_id = models.AutoField(primary_key=True, unique=True)
     patient = models.ForeignKey(Patients, related_name='patient_medication', on_delete=models.CASCADE) 
     medication = models.ForeignKey(Medication_master, related_name='medication', on_delete=models.CASCADE) 
-    medication_image = models.ImageField(upload_to='images/%Y/%m/%d/', max_length=255, null=True, blank=True)
+    medication_image = models.ImageField(upload_to=upload_to, max_length=255, default='posts/default.jpg')
     frequency = models.CharField(max_length=100)
     currently_taking = models.BooleanField(default=0)
-    start = models.DateTimeField(blank=True, null=True)
-    end = models.DateTimeField(blank=True, null=True)
+    start = models.DateField(blank=True, null=True)
+    end = models.DateField(blank=True, null=True)
 
     class Meta:
         db_table = 'Medication'

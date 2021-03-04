@@ -9,6 +9,8 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer
 from django.db.models import Avg, Count, Sum
+from rest_framework.views import APIView
+from rest_framework.parsers import MultiPartParser, FormParser
 
 
 class MedicationMasterViewSet(viewsets.ModelViewSet):
@@ -35,6 +37,13 @@ class MedicationViewSet(viewsets.ModelViewSet):
 
     queryset = Medication.objects.all()
     permission_classes = [permissions.AllowAny]
+    serializer_class = MedicationSerializer
+    parser_classes = [MultiPartParser]
+
+class CreateMed(viewsets.ModelViewSet):
+    queryset = Medication.objects.all()
+    permission_classes = [permissions.AllowAny]
+    parser_classes = [MultiPartParser, FormParser]
     serializer_class = MedicationSerializer
 
 class GlucoseLevelViewSet(viewsets.ModelViewSet):
