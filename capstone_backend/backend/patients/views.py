@@ -60,18 +60,6 @@ class MedicationViewSet(viewsets.ModelViewSet):
     # parser_classes = [MultiPartParser, FormParser]
     serializer_class = MedicationSerializer
 
-class MedicationList(viewsets.ModelViewSet):
-
-    serializer_class = MedicationSerializer
-
-    def get_queryset(self):
-
-        patient_id = self.request.query_params.get('patient_id')
-        today = datetime.date.today().strftime('%Y-%m-%d')
-        patient_list = Glucose_level.objects.filter(date =today, patient_id=patient_id)
-        # final = patient_list.all().aggregate(Avg('glucose_reading'))
-        return patient_list
-
 class GlucoseLevelViewSet(viewsets.ModelViewSet):
 
     queryset = Glucose_level.objects.all()

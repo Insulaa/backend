@@ -40,20 +40,8 @@ class MedicationSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Medication
-        fields = [
-                 'medication_input_id', 
-                 'patient',
-                 'medication',
-                 'image',
-                 'dosage',
-                 'unit',
-                 'frequency',
-                 'frequency_period',
-                 'currently_taking',
-                 'start',
-                 'end' 
-            ]
-            
+        fields = '__all__'
+
 class GlucoseSerializer(serializers.ModelSerializer):
     
     class Meta:
