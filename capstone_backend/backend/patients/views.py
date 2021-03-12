@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from patients.models import Patients, Patient_Setup, Medication, Glucose_level, Medication_master
 from rest_framework import viewsets, permissions, generics, status 
-from .serializers import PatientSerializer, SetupSerializer, MedicationSerializer, GlucoseSerializer, GlucoseFourteenSerializer, MedicationMasterSerializer
+from .serializers import PatientSerializer, SetupSerializer, GetMedicationSerializer, MedicationSerializer, GlucoseSerializer, GlucoseFourteenSerializer, MedicationMasterSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 import datetime 
 from rest_framework.decorators import api_view, permission_classes
@@ -33,6 +33,26 @@ class SetupViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
     serializer_class = SetupSerializer
 
+class GetMedicationCurrent(viewsets.ModelViewSet):
+
+    serializer_class = GetMedicationSerializer
+
+    def get_queryset(self):
+
+        patient_id = self.request.query_params.get('patient_id')
+        medication_list_current = Medication.objects.filter(patient_id=patient_id, currently_taking=True)
+        return medication_list_current
+
+class GetMedicationHistorical(viewsets.ModelViewSet):
+
+    serializer_class = GetMedicationSerializer
+
+    def get_queryset(self):
+
+        patient_id = self.request.query_params.get('patient_id')
+        medication_list_current = Medication.objects.filter(patient_id=patient_id, currently_taking=False)
+        return medication_list_current
+
 class MedicationViewSet(viewsets.ModelViewSet):
 
     queryset = Medication.objects.all()
@@ -40,9 +60,17 @@ class MedicationViewSet(viewsets.ModelViewSet):
     # parser_classes = [MultiPartParser, FormParser]
     serializer_class = MedicationSerializer
 
-# class MedicationList(viewsets.ModelViewSet):
+class MedicationList(viewsets.ModelViewSet):
 
+    serializer_class = MedicationSerializer
 
+    def get_queryset(self):
+
+        patient_id = self.request.query_params.get('patient_id')
+        today = datetime.date.today().strftime('%Y-%m-%d')
+        patient_list = Glucose_level.objects.filter(date =today, patient_id=patient_id)
+        # final = patient_list.all().aggregate(Avg('glucose_reading'))
+        return patient_list
 
 class GlucoseLevelViewSet(viewsets.ModelViewSet):
 
