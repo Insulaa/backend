@@ -39,7 +39,7 @@ class Medication(models.Model):
     medication_input_id = models.AutoField(primary_key=True, unique=True)
     patient = models.ForeignKey(Patients, related_name='patient_medication', on_delete=models.CASCADE) 
     medication = models.ForeignKey(Medication_master, related_name='medication', on_delete=models.CASCADE) 
-    image = models.ImageField(upload_to=upload_to, max_length=255, default='posts/default.jpg')
+    image = models.ImageField(upload_to=upload_to, max_length=255, default=null)
     dosage = models.IntegerField(blank=True, null=True)
     unit = models.CharField(max_length=20, null=True)
     frequency = models.IntegerField(blank=True, null=True)
@@ -70,3 +70,5 @@ class Weight(models.Model):
     weight_unit = models.CharField(max_length=100)
     date = models.DateField(auto_now=True)
     timestamp = models.TimeField(auto_now=True)
+
+

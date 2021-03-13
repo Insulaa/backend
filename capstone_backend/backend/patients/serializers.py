@@ -5,7 +5,7 @@ class MedicationMasterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Medication_master
         fields = '__all__'
-        # read_only_fields = ('medication_id', 'medication_name', 'medication_unit')
+        read_only_fields = ('medication_id', 'medication_name', 'medication_unit')
 
 class PatientSerializer(serializers.ModelSerializer):
     class Meta:
