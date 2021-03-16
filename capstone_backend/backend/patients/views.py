@@ -33,6 +33,16 @@ class SetupViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
     serializer_class = SetupSerializer
 
+class GetSingleMedication(viewsets.ModelViewSet): 
+
+    serializer_class = MedicationMasterSerializer
+
+    def get_queryset(self):
+
+        medication_id = self.request.query_params.get('medication_id')
+        medication_single = Medication_master.objects.filter(medication_id=medication_id)
+        return medication_single
+
 class GetMedicationCurrent(viewsets.ModelViewSet):
 
     serializer_class = GetMedicationSerializer
