@@ -69,6 +69,29 @@ class MedicationViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
     # parser_classes = [MultiPartParser, FormParser]
     serializer_class = MedicationSerializer
+    filterset_fields = ['medication_input_id', 'patient_id']
+
+    def partial_update(self, request, pk=None):
+
+        instance = self.get_object()
+        data = request.data 
+
+        instance.patient_id = data['patient']
+        instance.medication = data['medication']
+        instance.image = data['image']
+        instance.dosage = data['dosage']
+        instance.unit = data['unit']
+        instance.frequency = data['frequency']
+        instance.frequency_period = data['frequency_period']
+        instance.currently_taking = data['currently_taking']
+        instance.start = data['start']
+        instance.end = data['end']
+
+        instance.save()
+
+        serializer = MedicationSerializer(instance, partial=True)
+
+        return Response(serializer.data)
 
 class GlucoseLevelViewSet(viewsets.ModelViewSet):
 
