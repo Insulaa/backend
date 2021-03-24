@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from patients.models import Patients, Patient_Setup, Medication, Glucose_level, Medication_master
-from rest_framework import viewsets, permissions, generics, status 
+from rest_framework import viewsets, permissions, mixins, generics, status
 from .serializers import PatientSerializer, SetupSerializer, GetMedicationSerializer, MedicationSerializer, GlucoseSerializer, GlucoseFourteenSerializer, MedicationMasterSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 import datetime 
@@ -63,14 +63,41 @@ class GetMedicationHistorical(viewsets.ModelViewSet):
         medication_list_current = Medication.objects.filter(patient_id=patient_id, currently_taking=False)
         return medication_list_current
 
-class EndMedication(viewsets.ModelViewSet):
+class EndMedication(viewsets.ModelViewSet, mixins.UpdateModelMixin):
 
     serializer_class = MedicationSerializer
 
-    def partial_update(self, request, pk=None):
+    def get_queryset(self):
+        medications = Medication.objects.all()
+        return medications
 
+    # def partial_update(self, request, pk=None):
+
+    #     instance = self.get_object()
+    #     data = request.data
+
+    #     instance.patient_id = data['patient']
+    #     instance.medication_id = data['medication']
+    #     instance.image = data['image']
+    #     instance.dosage = data['dosage']
+    #     instance.unit = data['unit']
+    #     instance.frequency = data['frequency']
+    #     instance.frequency_period = data['frequency_period']
+    #     instance.currently_taking = False
+    #     instance.start = data['start']
+    #     instance.end = datetime.date.today().strftime('%Y-%m-%d')
+    #     instance.notes = data['notes']
+
+    #     instance.save()
+
+    #     serializer = MedicationSerializer(instance, partial=True)
+
+    #     return Response(serializer.data)
+
+    def patch(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', True)
         instance = self.get_object()
-        data = request.data
+        data = request.data 
 
         instance.patient_id = data['patient']
         instance.medication = data['medication']
@@ -86,25 +113,28 @@ class EndMedication(viewsets.ModelViewSet):
 
         instance.save()
 
-        serializer = MedicationSerializer(instance, partial=True)
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        self.perform_update(serializer)
+
+        # serializer = MedicationSerializer(instance, patient=True)
 
         return Response(serializer.data)
 
 
-class MedicationViewSet(viewsets.ModelViewSet):
+class MedicationViewSet(viewsets.ModelViewSet,
+                        mixins.UpdateModelMixin):
 
     queryset = Medication.objects.all()
     permission_classes = [permissions.AllowAny]
-    parser_classes = [MultiPartParser, FormParser]
+    # parser_classes = [MultiPartParser, FormParser]
     serializer_class = MedicationSerializer
     filterset_fields = ['medication_input_id', 'patient_id']
 
-    def partial_update(self, request, pk=None):
-
+    def patch(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', True)
         instance = self.get_object()
         data = request.data 
 
-        # instance.medication_input_id = data['medication_input_id']
         instance.patient_id = data['patient']
         instance.medication = data['medication']
         instance.image = data['image']
@@ -119,7 +149,10 @@ class MedicationViewSet(viewsets.ModelViewSet):
 
         instance.save()
 
-        serializer = MedicationSerializer(instance, patient=True)
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        self.perform_update(serializer)
+
+        # serializer = MedicationSerializer(instance, patient=True)
 
         return Response(serializer.data)
 
