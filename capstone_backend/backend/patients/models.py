@@ -47,6 +47,7 @@ class Medication(models.Model):
     currently_taking = models.BooleanField(default=0)
     start = models.DateField(blank=True, null=True)
     end = models.DateField(blank=True, null=True)
+    notes = models.CharField(max_length=500, null=True, blank=True)
 
     class Meta:
         db_table = 'Medication'
@@ -58,6 +59,7 @@ class Glucose_level(models.Model):
     #datetime.date.today().strftime('%Y-%m-%d')
     timestamp = models.TimeField(auto_now=True)
     #datetime.datetime.now().strftime("%H:%M:%S")
+    
 class Blood_pressure(models.Model):
     patient = models.ForeignKey(Patients, on_delete=models.CASCADE) 
     bp_reading = models.IntegerField(blank=True, null=True)

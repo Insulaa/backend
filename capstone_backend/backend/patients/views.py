@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer
 from django.db.models import Avg, Count, Sum
 from rest_framework.views import APIView
-from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 
 
 class MedicationMasterViewSet(viewsets.ModelViewSet):
@@ -63,11 +63,39 @@ class GetMedicationHistorical(viewsets.ModelViewSet):
         medication_list_current = Medication.objects.filter(patient_id=patient_id, currently_taking=False)
         return medication_list_current
 
+class EndMedication(viewsets.ModelViewSet):
+
+    serializer_class = MedicationSerializer
+
+    def partial_update(self, request, pk=None):
+
+        instance = self.get_object()
+        data = request.data
+
+        instance.patient_id = data['patient']
+        instance.medication = data['medication']
+        instance.image = data['image']
+        instance.dosage = data['dosage']
+        instance.unit = data['unit']
+        instance.frequency = data['frequency']
+        instance.frequency_period = data['frequency_period']
+        instance.currently_taking = False
+        instance.start = data['start']
+        instance.end = datetime.date.today().strftime('%Y-%m-%d')
+        instance.notes = data['notes']
+
+        instance.save()
+
+        serializer = MedicationSerializer(instance, partial=True)
+
+        return Response(serializer.data)
+
+
 class MedicationViewSet(viewsets.ModelViewSet):
 
     queryset = Medication.objects.all()
     permission_classes = [permissions.AllowAny]
-    # parser_classes = [MultiPartParser, FormParser]
+    parser_classes = [MultiPartParser, FormParser]
     serializer_class = MedicationSerializer
     filterset_fields = ['medication_input_id', 'patient_id']
 
@@ -76,6 +104,7 @@ class MedicationViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         data = request.data 
 
+        # instance.medication_input_id = data['medication_input_id']
         instance.patient_id = data['patient']
         instance.medication = data['medication']
         instance.image = data['image']
@@ -86,10 +115,11 @@ class MedicationViewSet(viewsets.ModelViewSet):
         instance.currently_taking = data['currently_taking']
         instance.start = data['start']
         instance.end = data['end']
+        instance.notes = data['notes']
 
         instance.save()
 
-        serializer = MedicationSerializer(instance, partial=True)
+        serializer = MedicationSerializer(instance, patient=True)
 
         return Response(serializer.data)
 

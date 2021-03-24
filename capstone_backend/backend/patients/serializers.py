@@ -33,7 +33,8 @@ class GetMedicationSerializer(serializers.ModelSerializer):
                  'frequency_period',
                  'currently_taking',
                  'start',
-                 'end' 
+                 'end', 
+                 'notes'
             ]
 
 class MedicationSerializer(serializers.ModelSerializer):
