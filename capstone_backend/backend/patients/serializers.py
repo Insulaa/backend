@@ -33,7 +33,28 @@ class SetupSerializer(serializers.ModelSerializer):
         model = User_Setup
         fields = '__all__'
 
+class GetMedicationSerializer(serializers.ModelSerializer):
+    medication = MedicationMasterSerializer(read_only=True)
+    
+    class Meta:
+        model = Medication
+        fields = [
+                 'medication_input_id', 
+                 'patient',
+                 'medication',
+                 'image',
+                 'dosage',
+                 'unit',
+                 'frequency',
+                 'frequency_period',
+                 'currently_taking',
+                 'start',
+                 'end', 
+                 'notes'
+            ]
+
 class MedicationSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = Medication
         fields = '__all__'
