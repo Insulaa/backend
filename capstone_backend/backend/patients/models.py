@@ -23,11 +23,16 @@ class Patients(models.Model):
 #need to figure out how to do this 
 class Patient_Setup(models.Model):
     patient = models.ForeignKey(Patients, related_name='patient_setup', on_delete=models.CASCADE) 
-    question1 = models.CharField(max_length=100)
-    question2 = models.CharField(max_length=100)
-    question3 = models.CharField(max_length=100)
-    upper_bound = models.FloatField(null=True)
-    lower_bound = models.FloatField(null=True)
+    dateOfBirth = models.DateField(null=True, blank=True)
+    sex = models.CharField(max_length=20, null=True)
+    height1 = models.IntegerField(null=True)
+    height1_unit = models.CharField(max_length=20, null=True)
+    height2 = models.IntegerField(null=True)
+    height2_unit = models.CharField(max_length=20, null=True)
+    weight = models.IntegerField(null=True)
+    weight_unit = models.CharField(max_length=20, null=True)
+    glucose_lower_limit= models.FloatField(null=True)
+    glucose_upper_limit = models.FloatField(null=True)
 
     class Meta:
         db_table = 'Patient_Setup'
