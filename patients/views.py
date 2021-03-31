@@ -1,16 +1,22 @@
 from django.shortcuts import render
-from patients.models import Patients, Patient_Setup, Medication, Glucose_level, Medication_master
+from django.contrib.auth import get_user_model, login
+from patients.models import CustomUser, User_Setup, Medication, Glucose_level, Medication_master
 from rest_framework import viewsets, permissions, mixins, generics, status
-from .serializers import PatientSerializer, SetupSerializer, GetMedicationSerializer, MedicationSerializer, GlucoseSerializer, GlucoseFourteenSerializer, MedicationMasterSerializer
+from .serializers import UserSerializer, SetupSerializer, RegisterSerializer, GetMedicationSerializer, MedicationSerializer, GlucoseSerializer, GlucoseFourteenSerializer, MedicationMasterSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 import datetime 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
 from rest_framework.renderers import JSONRenderer
 from django.db.models import Avg, Count, Sum
 from rest_framework.views import APIView
+from rest_framework.generics import CreateAPIView
+from knox.views import LoginView as KnoxLoginView
+from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
+from knox.models import AuthToken
 
 
 class MedicationMasterViewSet(viewsets.ModelViewSet):
@@ -21,15 +27,15 @@ class MedicationMasterViewSet(viewsets.ModelViewSet):
 
 class PatientViewSet(viewsets.ModelViewSet):
 
-    queryset = Patients.objects.all()
+    queryset = CustomUser.objects.all()
     permission_classes = [permissions.AllowAny]
-    serializer_class = PatientSerializer
+    serializer_class = UserSerializer
     # filter_backends = (DjangoFilterBackend)
     filterset_fields = ['patient_id', 'first_name']
 
 class SetupViewSet(viewsets.ModelViewSet):
 
-    queryset = Patient_Setup.objects.all()
+    queryset = User_Setup.objects.all()
     permission_classes = [permissions.AllowAny]
     serializer_class = SetupSerializer
 
@@ -238,7 +244,26 @@ class FourteenDayAvg(viewsets.ModelViewSet):
         # avg = sum(a)/len(a)
         return patient_list 
 
+class RegisterUserViewSet(generics.GenericAPIView):
+    # queryset = CustomUser.objects.all()
+    serializer_class = RegisterSerializer
 
-
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        return Response({
+        "user": UserSerializer(user, context=self.get_serializer_context()).data,
+        "token": AuthToken.objects.create(user)[1]
+        })
     
+class LoginViewSet(KnoxLoginView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, format=None):
+        serializer = AuthTokenSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        login(request, user)
+        return super(LoginViewSet, self).post(request, format=None)
 

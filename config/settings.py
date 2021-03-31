@@ -17,7 +17,8 @@ SECRET_KEY = 'x_dd2$uynfep%wsa12k5f$^s%n2@%w_ia$i!n9c!x#5@k)t*qm'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['10.0.2.2',
+ALLOWED_HOSTS = [
+'10.0.2.2',
 '127.0.0.1',
 'localhost',
 'capstone-django.herokuapp.com']
@@ -34,7 +35,8 @@ INSTALLED_APPS = [
     'patients',
     'rest_framework',
     'django_filters',
-    'phone_field'
+    'phone_field',
+    'knox'
 ]
 
 MIDDLEWARE = [
@@ -103,6 +105,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = 'patients.CustomUser'
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
@@ -136,6 +139,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.AllowAny'],
+    'DEFAULT_AUTHENTICATION_CLASSES': ['knox.auth.TokenAuthentication'],
     'DEFAULT_PARSER_CLASSES': [
         'rest_framework.parsers.JSONParser',
         'rest_framework.parsers.MultiPartParser',

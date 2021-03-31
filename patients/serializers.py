@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from patients.models import Medication_master, Patients, Patient_Setup, Medication, Glucose_level, Blood_pressure, Weight
+from django.contrib.auth import get_user_model
+from patients.models import Medication_master, CustomUser, User_Setup, Medication, Glucose_level, Blood_pressure, Weight
 
 class MedicationMasterSerializer(serializers.ModelSerializer):
     class Meta:
@@ -7,14 +8,33 @@ class MedicationMasterSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ('medication_id', 'medication_name', 'medication_unit')
 
-class PatientSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Patients
+        model = CustomUser
         fields = '__all__'
+        write_only_fields = ('password')
+
+class RegisterSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = CustomUser
+        fields = '__all__'
+        write_only_fields = ('password')
+    
+    def create(self, validated_data):
+        user = CustomUser.objects.create_user(
+            validated_data['email'], 
+            validated_data['password'],
+            validated_data['first_name'],
+            validated_data['last_name'], 
+            validated_data['phone_number']
+        )
+        return user
 
 class SetupSerializer(serializers.ModelSerializer):
     class Meta: 
-        model = Patient_Setup
+        model = User_Setup
         fields = '__all__'
 
 class GetMedicationSerializer(serializers.ModelSerializer):
