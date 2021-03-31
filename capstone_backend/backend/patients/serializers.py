@@ -23,9 +23,13 @@ class RegisterSerializer(serializers.ModelSerializer):
         write_only_fields = ('password')
     
     def create(self, validated_data):
-        user = super(RegisterSerializer, self).create(validated_data)
-        user.set_password(validated_data['password'])
-        user.save()
+        user = CustomUser.objects.create_user(
+            validated_data['email'], 
+            validated_data['password'],
+            validated_data['first_name'],
+            validated_data['last_name'], 
+            validated_data['phone_number']
+        )
         return user
 
 class SetupSerializer(serializers.ModelSerializer):

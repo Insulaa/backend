@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, login
 from patients.models import CustomUser, User_Setup, Medication, Glucose_level, Medication_master
 from rest_framework import viewsets, permissions, mixins, generics, status
 from .serializers import UserSerializer, SetupSerializer, RegisterSerializer, GetMedicationSerializer, MedicationSerializer, GlucoseSerializer, GlucoseFourteenSerializer, MedicationMasterSerializer
@@ -16,6 +16,7 @@ from rest_framework.generics import CreateAPIView
 from knox.views import LoginView as KnoxLoginView
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
+from knox.models import AuthToken
 
 
 class MedicationMasterViewSet(viewsets.ModelViewSet):
@@ -219,22 +220,17 @@ class FourteenDayAvg(viewsets.ModelViewSet):
         return patient_list 
 
 class RegisterUserViewSet(generics.GenericAPIView):
-    queryset = CustomUser.objects.all()
+    # queryset = CustomUser.objects.all()
     serializer_class = RegisterSerializer
-    permission_classes = [AllowAny]
 
-    def create(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        token = Token.objects.create(user=serializer.instance)
-        token_data = {"token": token.key}
-        return Response(
-            {**serializer.data, **token_data},
-            status=status.HTTP_201_CREATED,
-            headers=headers
-        )
+        user = serializer.save()
+        return Response({
+        "user": UserSerializer(user, context=self.get_serializer_context()).data,
+        "token": AuthToken.objects.create(user)[1]
+        })
     
 class LoginViewSet(KnoxLoginView):
     permission_classes = [AllowAny]

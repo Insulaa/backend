@@ -26,18 +26,18 @@ from knox import views as knox_views
 # urlpatterns = router.urls
 
 urlpatterns = [
-    path('views/patients', PatientViewSet, name='patients'),
-    path('views/setup', SetupViewSet, name='setup'),
-    path('views/getSingleMedication', GetSingleMedication, name='getSingleMedication'),
-    path('views/getMedicationsCurrent', GetMedicationCurrent, name='getMedicationCurrent'),
-    path('views/getMedicationsHistorical', GetMedicationHistorical, name='getMedicationHistorical'),
-    path('views/endMedication', EndMedication, name='endmedication'),
-    path('views/medications', MedicationViewSet, name='medications'),
-    path('views/glucoseLevels', GlucoseLevelViewSet, name='glucoseLevels'),
-    path('views/medicationMaster', MedicationMasterViewSet, name='medicationMaster'),
-    path('FourteenDayAvg', FourteenDayAvg, name='14Dayavg'),
-    path('GlucoseToday', GlucoseToday, name='GlucoseToday'),
-    path('auth/register', RegisterUserViewSet.as_view(), name='register'),
-    path('auth/login', LoginViewSet.as_view(), name='login'),
-    path('auth/logout', knox_views.LogoutView.as_view(), name='logout')
+    path('views/patients/', PatientViewSet.as_view({'get': 'list'}), name='patients'),
+    path('views/setup/', SetupViewSet.as_view({'get': 'list'}), name='setup'),
+    path('views/getSingleMedication/', GetSingleMedication.as_view({'get': 'list'}), name='getSingleMedication'),
+    path('views/getMedicationsCurrent/', GetMedicationCurrent.as_view({'get': 'list'}), name='getMedicationCurrent'),
+    path('views/getMedicationsHistorical/', GetMedicationHistorical.as_view({'get': 'list'}), name='getMedicationHistorical'),
+    path('views/endMedication/', EndMedication.as_view({'get': 'list'}), name='endmedication'),
+    path('views/medications/', MedicationViewSet.as_view({'get': 'list'}), name='medications'),
+    path('views/glucoseLevels/', GlucoseLevelViewSet.as_view({'get': 'list'}), name='glucoseLevels'),
+    path('views/medicationMaster/', MedicationMasterViewSet.as_view({'get': 'list'}), name='medicationMaster'),
+    path('FourteenDayAvg/', FourteenDayAvg.as_view({'get': 'list'}), name='14Dayavg'),
+    path('GlucoseToday/', GlucoseToday.as_view({'get': 'list'}), name='GlucoseToday'),
+    path('auth/register/', RegisterUserViewSet.as_view(), name='register'),
+    path('auth/login/', LoginViewSet.as_view(), name='login'),
+    path('auth/logout/', knox_views.LogoutView.as_view(), name='logout')
 ]
