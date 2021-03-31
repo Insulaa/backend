@@ -42,7 +42,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 #need to figure out how to do this 
 
 class User_Setup(models.Model):
-    patient = models.ForeignKey(Patients, related_name='patient_setup', on_delete=models.CASCADE) 
+    patient = models.ForeignKey(CustomUser, related_name='patient_setup', on_delete=models.CASCADE) 
     dateOfBirth = models.DateField(null=True, blank=True)
     sex = models.CharField(max_length=20, null=True)
     height1 = models.IntegerField(null=True)
