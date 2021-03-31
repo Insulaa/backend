@@ -39,6 +39,32 @@ class SetupViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
     serializer_class = SetupSerializer
 
+    def patch(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', True)
+        instance = self.get_object()
+        data = request.data 
+
+        instance.patient_id = data['patient']
+        instance.dateOfBirth = data['dateOfBirth']
+        instance.sex = data['sex']
+        instance.height1 = data['height1']
+        instance.height2 = data['height2']
+        instance.height_unit = data['height_unit ']
+        instance.weight = data['weight']
+        instance.weight_unit = data['weight_unit']
+        instance.glucose_lower_limit = data['glucose_lower_limit']
+        instance.glucose_upper_limit = data['glucose_upper_limit']
+
+
+        instance.save()
+
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        self.perform_update(serializer)
+
+        # serializer = MedicationSerializer(instance, patient=True)
+
+        return Response(serializer.data)
+
 class GetSingleMedication(viewsets.ModelViewSet): 
 
     serializer_class = MedicationMasterSerializer
@@ -127,8 +153,7 @@ class EndMedication(viewsets.ModelViewSet, mixins.UpdateModelMixin):
         return Response(serializer.data)
 
 
-class MedicationViewSet(viewsets.ModelViewSet,
-                        mixins.UpdateModelMixin):
+class MedicationViewSet(viewsets.ModelViewSet):
 
     queryset = Medication.objects.all()
     permission_classes = [permissions.AllowAny]
@@ -169,19 +194,19 @@ class GlucoseLevelViewSet(viewsets.ModelViewSet):
     serializer_class = GlucoseSerializer
     filterset_fields = ['patient_id', 'date']
 
-    def partial_update(self, request, pk=None):
+    # def partial_update(self, request, pk=None):
 
-        instance = self.get_object()
-        data = request.data 
+    #     instance = self.get_object()
+    #     data = request.data 
 
-        instance.patient_id = data['patient']
-        instance.glucose_reading = data['glucose_reading']
+    #     instance.patient_id = data['patient']
+    #     instance.glucose_reading = data['glucose_reading']
 
-        instance.save()
+    #     instance.save()
 
-        serializer = GlucoseSerializer(instance, partial=True)
+    #     serializer = GlucoseSerializer(instance, partial=True)
 
-        return Response(serializer.data)
+    #     return Response(serializer.data)
 
 class GlucoseToday(viewsets.ModelViewSet):
 
