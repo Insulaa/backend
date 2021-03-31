@@ -30,6 +30,7 @@ sqlparse = "==0.2.4"
 whitenoise = "==5.2.0"
 Django = "==3.0.5"
 Pillow = "==8.1.2"
+django-heroku = "*"
 
 [requires]
 python_version = "3.8"
