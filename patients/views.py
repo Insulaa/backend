@@ -38,6 +38,7 @@ class SetupViewSet(viewsets.ModelViewSet):
     queryset = User_Setup.objects.all()
     permission_classes = [permissions.AllowAny]
     serializer_class = SetupSerializer
+    filterset_fields = ['patient_id']
 
     def patch(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', True)
