@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from patients.models import Medication_master, CustomUser, User_Setup, Medication, Glucose_level, Blood_pressure, Weight
+from patients.models import Medication_master, CustomUser, User_Setup, Medication, Glucose_level, Blood_pressure, Weight, Auth_token
 
 class MedicationMasterSerializer(serializers.ModelSerializer):
     class Meta:
@@ -76,7 +76,6 @@ class GlucoseFourteenSerializer(serializers.ModelSerializer):
         model = Glucose_level
         fields = ('date', 'glucose_reading', 'id', 'patient_id', 'timestamp')
 
-
 class BloodSerializer(serializers.ModelSerializer):
     class Meta:
         model = Blood_pressure
@@ -85,4 +84,9 @@ class BloodSerializer(serializers.ModelSerializer):
 class WeightSerializer(serializers.ModelSerializer):
     class Meta:
         model = Weight
+        fields = '__all__'
+
+class AuthTokenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Auth_token
         fields = '__all__'
