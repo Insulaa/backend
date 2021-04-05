@@ -98,4 +98,6 @@ class Weight(models.Model):
     date = models.DateField(auto_now=True)
     timestamp = models.TimeField(auto_now=True)
 
-
+class Auth_token(models.Model):
+    patient_id = models.ForeignKey(CustomUser, related_name='patient_token', on_delete=models.CASCADE)
+    token = models.CharField(max_length=100)

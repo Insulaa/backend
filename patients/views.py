@@ -268,3 +268,11 @@ class LoginViewSet(KnoxLoginView):
         login(request, user)
         return super(LoginViewSet, self).post(request, format=None)
 
+class GetUserIdWithTokenViewSet(viewsets.ModelViewSet):
+    serializer_class = AuthTokenSerializer
+
+    def get_queryset(self):
+
+        token = self.request.query_params.get('token')
+        user_id = Patient_auth_tokens.objects.filter(token = token)
+        return user_id
