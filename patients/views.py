@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.contrib.auth import get_user_model, login
-from patients.models import CustomUser, User_Setup, Medication, Glucose_level, Medication_master
+from patients.models import CustomUser, User_Setup, Medication, Glucose_level, Medication_master, Blood_pressure
 from rest_framework import viewsets, permissions, mixins, generics, status
-from .serializers import UserSerializer, SetupSerializer, RegisterSerializer, GetMedicationSerializer, MedicationSerializer, GlucoseSerializer, GlucoseFourteenSerializer, MedicationMasterSerializer
+from .serializers import UserSerializer, SetupSerializer, RegisterSerializer, GetMedicationSerializer, MedicationSerializer, GlucoseSerializer, GlucoseFourteenSerializer, MedicationMasterSerializer, BloodSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 import datetime 
 from rest_framework.decorators import api_view, permission_classes
@@ -276,3 +276,11 @@ class GetUserIdWithTokenViewSet(viewsets.ModelViewSet):
         token = self.request.query_params.get('token')
         user_id = Patient_auth_tokens.objects.filter(token = token)
         return user_id
+
+class BloodPressureViewSet(viewsets.ModelViewSet):
+
+    queryset = Blood_pressure.objects.all()
+    permission_classes = [permissions.AllowAny]
+    serializer_class = BloodSerializer
+    # filter_backends = (DjangoFilterBackend)
+    filterset_fields = ['patient_id']
