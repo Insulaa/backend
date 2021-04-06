@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from django.contrib.auth import get_user_model
-from patients.models import Medication_master, CustomUser, User_Setup, Medication, Glucose_level, Blood_pressure, Weight, Auth_token
+from django.contrib.auth import get_user_model, authenticate
+from patients.models import Medication_master, CustomUser, User_Setup, Medication, Glucose_level, Blood_pressure, Weight
 
 class MedicationMasterSerializer(serializers.ModelSerializer):
     class Meta:
@@ -31,6 +31,16 @@ class RegisterSerializer(serializers.ModelSerializer):
             validated_data['phone_number']
         )
         return user
+
+class LoginSerializer(serializers.Serializer):
+    email = serializers.CharField()
+    password = serializers.CharField()
+
+    def validate(self, data):
+        user = authenticate(**data)
+        if user and user.is_active:
+            return user
+        raise serializers.ValidationError("Incorrect Credentials")
 
 class SetupSerializer(serializers.ModelSerializer):
     class Meta: 
@@ -84,9 +94,4 @@ class BloodSerializer(serializers.ModelSerializer):
 class WeightSerializer(serializers.ModelSerializer):
     class Meta:
         model = Weight
-        fields = '__all__'
-
-class AuthTokenSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Auth_token
         fields = '__all__'

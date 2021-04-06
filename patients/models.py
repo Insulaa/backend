@@ -13,17 +13,6 @@ class Medication_master(models.Model):
     class Meta:
         db_table = 'Medication_master'
 
-# class Patients(models.Model):
-#     patient_id = models.AutoField(primary_key=True, unique=True)
-#     first_name = models.CharField(max_length=100)
-#     last_name = models.CharField(max_length=100)
-#     password = models.CharField(max_length=100)
-#     email = models.CharField(max_length=100, unique=True)
-#     phone_number = PhoneField(blank=True)
-
-#     class Meta:
-#         db_table = 'Patients'
-
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     patient_id = models.AutoField(primary_key=True, unique=True)
     first_name = models.CharField(max_length=100)
@@ -38,8 +27,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     class Meta: 
         db_table = 'Patients'
-
-#need to figure out how to do this 
 
 class User_Setup(models.Model):
     patient = models.ForeignKey(CustomUser, related_name='patient_setup', on_delete=models.CASCADE) 
@@ -97,7 +84,3 @@ class Weight(models.Model):
     weight_unit = models.CharField(max_length=100)
     date = models.DateField(auto_now=True)
     timestamp = models.TimeField(auto_now=True)
-
-class Auth_token(models.Model):
-    patient_id = models.ForeignKey(CustomUser, related_name='patient_token', on_delete=models.CASCADE)
-    token = models.CharField(max_length=100)
