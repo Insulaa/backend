@@ -40,7 +40,7 @@ urlpatterns = [
     # path('GlucoseToday/', GlucoseToday.as_view({'get': 'list'}), name='GlucoseToday'),
     path('auth/register/', RegisterUserViewSet.as_view(), name='register'),
     path('auth/login/', LoginViewSet.as_view(), name='login'),
-    path('auth/logout/', knox_views.LogoutView.as_view(), name='logout')
+    path('auth/logout/', knox_views.LogoutView.as_view(), name='knox_logout')
 ]
 
 urlpatterns += router.urls

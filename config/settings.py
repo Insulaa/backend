@@ -138,7 +138,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
-    'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.AllowAny'],
+    'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.IsAuthenticated'],
     'DEFAULT_AUTHENTICATION_CLASSES': ['knox.auth.TokenAuthentication'],
     'DEFAULT_PARSER_CLASSES': [
         'rest_framework.parsers.JSONParser',
@@ -147,3 +147,5 @@ REST_FRAMEWORK = {
     ]
     # 'DEFAULT_RENDERER_CLASSES': ['rest_framework.renderers.JSONRenderer']
 }
+
+REST_AUTH_TOKEN_MODEL = 'knox.models.AuthToken'
