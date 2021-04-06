@@ -74,7 +74,8 @@ class Glucose_level(models.Model):
     
 class Blood_pressure(models.Model):
     patient = models.ForeignKey(CustomUser, on_delete=models.CASCADE) 
-    bp_reading = models.IntegerField(blank=True, null=True)
+    systolic = models.IntegerField(blank=True, null=True)
+    diastolic = models.IntegerField(blank=True, null=True)
     date = models.DateField(auto_now=True)
     timestamp = models.TimeField(auto_now=True)
 
