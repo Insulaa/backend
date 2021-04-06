@@ -2,11 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth import get_user_model, login
 from patients.models import CustomUser, User_Setup, Medication, Glucose_level, Medication_master, Blood_pressure
 from rest_framework import viewsets, permissions, mixins, generics, status
-<<<<<<< HEAD
-from .serializers import LoginSerializer, UserSerializer, SetupSerializer, RegisterSerializer, GetMedicationSerializer, MedicationSerializer, GlucoseSerializer, GlucoseFourteenSerializer, MedicationMasterSerializer
-=======
-from .serializers import UserSerializer, SetupSerializer, RegisterSerializer, GetMedicationSerializer, MedicationSerializer, GlucoseSerializer, GlucoseFourteenSerializer, MedicationMasterSerializer, BloodSerializer
->>>>>>> main
+from .serializers import LoginSerializer, UserSerializer, SetupSerializer, RegisterSerializer, GetMedicationSerializer, MedicationSerializer, GlucoseSerializer, GlucoseFourteenSerializer, MedicationMasterSerializer, BloodSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 import datetime 
 from rest_framework.decorators import api_view, permission_classes
