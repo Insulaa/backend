@@ -1,15 +1,17 @@
 from django.shortcuts import render
 from django.contrib.auth import get_user_model, login
-from patients.models import CustomUser, User_Setup, Medication, Glucose_level, Medication_master, Blood_pressure
+from patients.models import CustomUser, User_Setup, Medication, Glucose_level, Medication_master, Blood_pressure, Weight
 from rest_framework import viewsets, permissions, mixins, generics, status
+
+from report.report_util import glucose_graph, PDFReport
 from .serializers import LoginSerializer, UserSerializer, SetupSerializer, RegisterSerializer, GetMedicationSerializer, MedicationSerializer, GlucoseSerializer, GlucoseFourteenSerializer, MedicationMasterSerializer, BloodSerializer
 from django_filters.rest_framework import DjangoFilterBackend
-import datetime 
-from rest_framework.decorators import api_view, permission_classes
+import datetime
+from rest_framework.decorators import api_view, permission_classes, action
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
-from rest_framework.renderers import JSONRenderer
+from rest_framework.renderers import JSONRenderer, BaseRenderer
 from django.db.models import Avg, Count, Sum
 from rest_framework.views import APIView
 from rest_framework.generics import CreateAPIView
@@ -17,6 +19,8 @@ from knox.views import LoginView as KnoxLoginView
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from knox.models import AuthToken
+import numpy as np
+import pandas as pd
 
 
 class MedicationMasterViewSet(viewsets.ModelViewSet):
@@ -293,3 +297,44 @@ class BloodPressureViewSet(viewsets.ModelViewSet):
     serializer_class = BloodSerializer
     # filter_backends = (DjangoFilterBackend)
     filterset_fields = ['patient_id']
+
+class BinaryFileRenderer(BaseRenderer):
+    media_type = 'application/octet-stream'
+    format = None
+    charset = None
+    render_style = 'binary'
+
+    def render(self, data, media_type=None, renderer_context=None):
+        return data
+
+class ReportViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
+
+    @action(methods=['get'], detail=False, renderer_classes=(BinaryFileRenderer,))
+    def download(self, request, *args, **kwargs):
+        patient_id = self.request.query_params.get('patient_id')
+        start_date = (datetime.date.today() - datetime.timedelta(days=14)).strftime('%Y-%m-%d')
+        end_date = (datetime.date.today() + datetime.timedelta(days=1)).strftime('%Y-%m-%d')
+
+        glucose_reading = Glucose_level.objects.filter(patient_id=patient_id, date__range =(start_date, end_date)).values_list('glucose_reading', flat=True)
+        glucose_reading_date = Glucose_level.objects.filter(patient_id=patient_id, date__range=(start_date, end_date)).values_list('date', flat=True)
+        glucose_reading_time = Glucose_level.objects.filter(patient_id=patient_id, date__range=(start_date, end_date)).values_list('timestamp', flat=True)
+        glucose_df = pd.DataFrame(np.column_stack([glucose_reading, glucose_reading_date, glucose_reading_time]), columns=['glucose_reading', 'date', 'time'])
+        glucose_graph(glucose_df)
+
+        first_name = CustomUser.objects.filter(patient_id=patient_id).values_list('first_name', flat=True)[0]
+        last_name = CustomUser.objects.filter(patient_id=patient_id).values_list('last_name', flat=True)[0]
+
+        weight = User_Setup.objects.filter(patient_id=patient_id).values_list('weight', flat=True)[0]
+
+        medications = Medication.objects.filter(patient_id=patient_id).values('medication', 'dosage', 'unit', 'frequency', 'frequency_period', 'currently_taking', 'start', 'end')
+
+        PDFReport("report/Patient_Report.pdf")
+
+        with open('report/Patient_Report.pdf', 'rb') as report:
+            return Response(
+                report.read(),
+                headers={'Content-Disposition': 'attachment; filename="Patient_Report.pdf"'},
+                content_type='application/pdf')
+

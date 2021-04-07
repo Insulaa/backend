@@ -1,5 +1,7 @@
 from rest_framework import routers
-from .views import GetUserIdWithTokenViewSet, LoginViewSet, RegisterUserViewSet, PatientViewSet, SetupViewSet, GetSingleMedication, GetMedicationCurrent, GetMedicationHistorical, EndMedication, MedicationViewSet, GlucoseLevelViewSet, MedicationMasterViewSet, FourteenDayAvg, GlucoseToday, BloodPressureViewSet
+from .views import GetUserIdWithTokenViewSet, LoginViewSet, RegisterUserViewSet, PatientViewSet, SetupViewSet, \
+    GetSingleMedication, GetMedicationCurrent, GetMedicationHistorical, EndMedication, MedicationViewSet, \
+    GlucoseLevelViewSet, MedicationMasterViewSet, FourteenDayAvg, GlucoseToday, BloodPressureViewSet, ReportViewSet
 from . import views
 from rest_framework.authtoken import views
 from django.urls import path
@@ -18,6 +20,7 @@ router.register('views/MedicationMaster', MedicationMasterViewSet, 'MedicationMa
 router.register('views/FourteenDayAvg', FourteenDayAvg, '14Dayavg')
 router.register('views/GlucoseToday', GlucoseToday, 'GlucoseToday')
 router.register('views/BloodPressure', BloodPressureViewSet, 'BloodPressure')
+router.register('views/FetchReport', ReportViewSet, 'FetchReport')
 router.register('auth/user', GetUserIdWithTokenViewSet, 'UserId')
 
 # # Routes for Authentication
